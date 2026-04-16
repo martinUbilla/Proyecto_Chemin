@@ -42,4 +42,8 @@ export function loginUser(email, password) {
   return apiClient.post("/api/auth/login", { email, password });
 }
 
+export function sendDocument(file) {
+  console.log("Conexion wena");
+  return apiClient.post("/api/submissions", file);
+}
 export default apiClient;

@@ -66,7 +66,7 @@ namespace backend.Services
                 issuer: jwtConfig["Issuer"],
                 audience: jwtConfig["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(24),
+                expires: DateTime.UtcNow.AddHours(12),
                 signingCredentials: credentials
             );
 

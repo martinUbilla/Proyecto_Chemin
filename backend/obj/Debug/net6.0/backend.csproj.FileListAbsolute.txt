@@ -64,3 +64,4 @@ C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\obj\Debug\net6.0\ref\backend.dll
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\package-lock.json

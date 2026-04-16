@@ -7,15 +7,23 @@
     <div class="submissions-container">
       <p>{{ greeting }}, {{ user.name }}!</p>
       <p style="margin-top: 20px">
-        Los envíos de documentos estarán disponibles pronto.
+        Envia tu documento
       </p>
-
+    <div class = "submission-form">
+      <form @submit.prevent = "submitForm">
+        <input type ="file" accept = "application/pdf" @change="handleFileUpload"/>
+        
+        <button type="submit" class="btn-primary" :disabled="loading">Subir!</button>
+        </form>
+          <p v-if="uploadStatus">{{ uploadStatus }}</p>
+    </div>
       <button @click="logout" class="btn-secondary">Cerrar Sesión</button>
     </div>
   </div>
 </template>
 
 <script>
+import apiClient from "@/api/client";
 import store from "@/store";
 
 export default {
@@ -24,6 +32,9 @@ export default {
     return {
       user: store.auth.state.user || {},
       greeting: ["Bienvenido", "Hola"][Math.floor(Math.random() * 2)],
+      pdfFile : null,
+      uploadStatus: ''  
+
     };
   },
   methods: {
@@ -31,6 +42,28 @@ export default {
       store.auth.mutations.clearAuth();
       this.$router.push("/login");
     },
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if(file && file.type === 'application/pdf') {
+        this.pdfFile = file;
+        this.uploadStatus= '';
+      }else{
+        this.pdfFile = null;
+        this.uploadStatus= 'El archivo debe ser en formato PDF';
+      }
+    },
+    async submitForm(){
+      if(!this.pdfFile) return;
+      const formData = new FormData();
+      formData.append('pdf', this.pdfFile);
+      try{
+        const response= await apiClient.sendDocument(formData);
+        this.uploadStatus= response.data.message;
+        console.log("fetch funca");
+      }catch(err){
+        this.uploadStatus= err.response.data.message
+      }
+    }
   },
 };
 </script>
@@ -85,5 +118,23 @@ h1 {
 
 .btn-secondary:hover {
   opacity: 0.9;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+.btn-primary {
+  padding: 12px 24px;
+  margin: 20px;
+  background: var(--accent, #667eea);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+.submission-form {
+  margin: 20px;
 }
 </style>

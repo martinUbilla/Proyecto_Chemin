@@ -5,7 +5,7 @@
         <p class="eyebrow">Proyecto Chemin</p>
       </div>
       <nav class="nav-links" aria-label="Primary">
-        <router-link to="/">Inicio</router-link>
+        <router-link to="/login">Inicio</router-link>
       </nav>
     </header>
 
