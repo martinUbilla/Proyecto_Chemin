@@ -13,7 +13,7 @@
       <form @submit.prevent = "submitForm">
         <input type ="file" accept = "application/pdf" @change="handleFileUpload"/>
         
-        <button type="submit" class="btn-primary" :disabled="loading">Subir!</button>
+        <button @click="submitForm" type="submit" class="btn-primary" :disabled="loading">Subir!</button>
         </form>
           <p v-if="uploadStatus">{{ uploadStatus }}</p>
     </div>
@@ -53,6 +53,8 @@ export default {
       }
     },
     async submitForm(){
+      
+      console.log(this.pdfFile);
       if(!this.pdfFile) return;
       const formData = new FormData();
       formData.append('pdf', this.pdfFile);
