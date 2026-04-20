@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.Services;
+using backend.Services.Extraction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Register Auth Service
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
-
+builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+builder.Services.AddSingleton<IHybridPdfExtractor, HybridPdfExtractor>();
 // Configure JWT Authentication
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtConfig["Key"] ?? "fallback-key-for-development-only");

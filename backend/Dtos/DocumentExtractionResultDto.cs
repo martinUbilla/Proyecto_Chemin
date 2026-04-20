@@ -13,4 +13,7 @@ public class DocumentExtractionResultDto
     public bool HasText { get; set; }
     public bool LikelyScanned { get; set; }
     public int ConfidenceScore { get; set; }
+    public int PagesTotal { get; set; }
+public int PagesOcr { get; set; }
+public float AverageOcrConfidence { get; set; }
 }

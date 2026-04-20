@@ -70,3 +70,17 @@ C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\UglyToad.PdfPig.Tokenization.dll
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\UglyToad.PdfPig.Tokens.dll
 C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\backend.exe
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\tessdata\eng.traineddata
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\tessdata\fra.traineddata
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\tessdata\ita.traineddata
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\tessdata\spa.traineddata
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\x86\leptonica-1.82.0.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\x86\tesseract50.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\x64\leptonica-1.82.0.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\x64\tesseract50.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\SkiaSharp.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\Tesseract.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\runtimes\osx\native\libSkiaSharp.dylib
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\runtimes\win-arm64\native\libSkiaSharp.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\runtimes\win-x64\native\libSkiaSharp.dll
+C:\Users\marti\OneDrive\Documentos\U\Séptimo semestre\Proyecto Chemin\Proyecto_Chemin\backend\bin\Debug\net6.0\runtimes\win-x86\native\libSkiaSharp.dll

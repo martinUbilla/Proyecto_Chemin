@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using backend.Dtos;
 using Microsoft.AspNetCore.Http;
 using UglyToad.PdfPig;
+using backend.Services.Extraction;
 
 namespace backend.Services;
 
@@ -59,7 +60,12 @@ public class SubmissionService : ISubmissionService
 		"ramo",
 		"ramos"
 	};
+	private readonly IHybridPdfExtractor _pdfExtractor;
 
+	public SubmissionService(IHybridPdfExtractor pdfExtractor)
+	{
+		_pdfExtractor = pdfExtractor;
+	}
 	public async Task<DocumentExtractionResultDto> ExtractDocumentDataAsync(IFormFile pdfFile, CancellationToken cancellationToken = default)
 	{
 		await using var stream = pdfFile.OpenReadStream();
@@ -68,17 +74,27 @@ public class SubmissionService : ISubmissionService
 		await stream.CopyToAsync(buffer, cancellationToken);
 		buffer.Position = 0;
 
+		var pages = await _pdfExtractor.ExtractAllPagesAsync(buffer, cancellationToken); 
 		var textBuilder = new StringBuilder();
-		using (var pdf = PdfDocument.Open(buffer))
-		{
-			foreach (var page in pdf.GetPages())
-			{
-				textBuilder.AppendLine(page.Text);
-			}
-		}
+		var ocrPageCount = 0;
+    	var totalConfidence = 0f;
+    	var ocrPages = pages.Where(p => p.WasOcr).ToList();
+	
+		foreach (var page in pages)
+   		{
+        	textBuilder.AppendLine(page.Text);
+        	if (page.WasOcr)
+        	{
+            	ocrPageCount++;
+            	totalConfidence += page.OcrConfidence;
+        	}
+    	}
 
 		var rawText = textBuilder.ToString().Trim();
 		var lines = BuildLines(rawText);
+		var averageOcrConfidence = ocrPages.Count > 0
+        ? totalConfidence / ocrPages.Count
+        : -1f;
 		var normalizedText = NormalizeForSearch(rawText);
 		var studentName = ExtractStudentName(rawText, lines);
 		var rut = ExtractRut(rawText);
@@ -99,8 +115,11 @@ public class SubmissionService : ISubmissionService
 			TextPreview = BuildTextPreview(rawText),
 			NormalizedPreview = BuildTextPreview(normalizedText),
 			HasText = hasText,
-			LikelyScanned = !hasText || rawText.Length < 180,
-			ConfidenceScore = confidenceScore
+			LikelyScanned = ocrPageCount > 0,          // Ahora es preciso
+        	PagesTotal = pages.Count,                   // Nuevo campo
+        	PagesOcr = ocrPageCount,                    // Nuevo campo
+        	AverageOcrConfidence = averageOcrConfidence, // Nuevo campo
+        	ConfidenceScore = CalculateConfidenceScore(hasText, studentName, rut, hostInstitution, academicPeriod)
 		};
 	}
 
