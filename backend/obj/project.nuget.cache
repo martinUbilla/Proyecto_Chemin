@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "HZydvTBsuUw1Tx2z5sjIfSrydFAp5OOCaqHz1NQ8aCWA9Q6B7K5V3wi/x8BWVeuFG+vrkijM//3z9QSvJOjNjQ==",
+  "dgSpecHash": "iFIdQ50SX6OdDvPHAc9/y6KUC1SKAqm1IOVBlE8B43Q498Cm9+RGHNk2HkxJgcg9jQoCxLy3MzJ9N7gMeScCSg==",
   "success": true,
   "projectFilePath": "C:\\Users\\marti\\OneDrive\\Documentos\\U\\Séptimo semestre\\Proyecto Chemin\\Proyecto_Chemin\\backend\\backend.csproj",
   "expectedPackageFiles": [
@@ -58,7 +58,12 @@
     "C:\\Users\\marti\\.nuget\\packages\\system.text.encoding.codepages\\4.7.0\\system.text.encoding.codepages.4.7.0.nupkg.sha512",
     "C:\\Users\\marti\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
     "C:\\Users\\marti\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
-    "C:\\Users\\marti\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512"
+    "C:\\Users\\marti\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
+    "C:\\Users\\marti\\.nuget\\packages\\uglytoad.pdfpig\\1.7.0-custom-5\\uglytoad.pdfpig.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\marti\\.nuget\\packages\\uglytoad.pdfpig.core\\1.7.0-custom-5\\uglytoad.pdfpig.core.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\marti\\.nuget\\packages\\uglytoad.pdfpig.fonts\\1.7.0-custom-5\\uglytoad.pdfpig.fonts.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\marti\\.nuget\\packages\\uglytoad.pdfpig.tokenization\\1.7.0-custom-5\\uglytoad.pdfpig.tokenization.1.7.0-custom-5.nupkg.sha512",
+    "C:\\Users\\marti\\.nuget\\packages\\uglytoad.pdfpig.tokens\\1.7.0-custom-5\\uglytoad.pdfpig.tokens.1.7.0-custom-5.nupkg.sha512"
   ],
   "logs": []
 }

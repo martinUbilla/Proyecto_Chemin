@@ -1,9 +1,9 @@
 using backend.Dtos;
+using Microsoft.AspNetCore.Http;
 
-namespace backend.Services
+namespace backend.Services;
+
+public interface ISubmissionService
 {
-    public interface ISubmissionService
-    {
-        Task<Boolean> SubmitDocuments(LoginRequest request);
-    }
+    Task<DocumentExtractionResultDto> ExtractDocumentDataAsync(IFormFile pdfFile, CancellationToken cancellationToken = default);
 }

@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register Auth Service
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISubmissionService, SubmissionService>();
 
 // Configure JWT Authentication
 var jwtConfig = builder.Configuration.GetSection("Jwt");

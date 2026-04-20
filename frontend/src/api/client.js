@@ -43,7 +43,10 @@ export function loginUser(email, password) {
 }
 
 export function sendDocument(file) {
-  console.log("Conexion wena");
-  return apiClient.post("/api/submissions", file);
+  return apiClient.post("/api/submissions", file, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }
 export default apiClient;
