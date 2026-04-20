@@ -66,62 +66,79 @@ public class SubmissionService : ISubmissionService
 	{
 		_pdfExtractor = pdfExtractor;
 	}
-	public async Task<DocumentExtractionResultDto> ExtractDocumentDataAsync(IFormFile pdfFile, CancellationToken cancellationToken = default)
-	{
-		await using var stream = pdfFile.OpenReadStream();
+	public async Task<DocumentExtractionResultDto> ExtractDocumentDataAsync(
+    IFormFile pdfFile, 
+    CancellationToken cancellationToken = default)
+{
+    // ── 1. Leer el archivo una sola vez ───────────────────────────────────
+    await using var stream = pdfFile.OpenReadStream();
+    using var buffer = new MemoryStream();
+    await stream.CopyToAsync(buffer, cancellationToken);
+    buffer.Position = 0;
 
-		using var buffer = new MemoryStream();
-		await stream.CopyToAsync(buffer, cancellationToken);
-		buffer.Position = 0;
+    // ── 2. Extraer páginas (digital u OCR según corresponda) ──────────────
+    var pages = await _pdfExtractor.ExtractAllPagesAsync(buffer, cancellationToken);
 
-		var pages = await _pdfExtractor.ExtractAllPagesAsync(buffer, cancellationToken); 
-		var textBuilder = new StringBuilder();
-		var ocrPageCount = 0;
-    	var totalConfidence = 0f;
-    	var ocrPages = pages.Where(p => p.WasOcr).ToList();
-	
-		foreach (var page in pages)
-   		{
-        	textBuilder.AppendLine(page.Text);
-        	if (page.WasOcr)
-        	{
-            	ocrPageCount++;
-            	totalConfidence += page.OcrConfidence;
-        	}
-    	}
+    var textBuilder    = new StringBuilder();
+    var ocrPageCount   = 0;
+    var totalConfidence = 0f;
 
-		var rawText = textBuilder.ToString().Trim();
-		var lines = BuildLines(rawText);
-		var averageOcrConfidence = ocrPages.Count > 0
-        ? totalConfidence / ocrPages.Count
-        : -1f;
-		var normalizedText = NormalizeForSearch(rawText);
-		var studentName = ExtractStudentName(rawText, lines);
-		var rut = ExtractRut(rawText);
-		var hostInstitution = ExtractHostInstitution(rawText, lines);
-		var academicPeriod = ExtractAcademicPeriod(rawText, lines);
-		var courseCandidates = ExtractCourseCandidates(lines);
-		var hasText = !string.IsNullOrWhiteSpace(rawText);
-		var confidenceScore = CalculateConfidenceScore(hasText, studentName, rut, hostInstitution, academicPeriod);
+    foreach (var page in pages)
+    {
+        textBuilder.AppendLine(page.Text);
+        if (page.WasOcr)
+        {
+            ocrPageCount++;
+            totalConfidence += page.OcrConfidence;
+        }
+    }
 
-		return new DocumentExtractionResultDto
-		{
-			FileName = pdfFile.FileName,
-			StudentName = studentName,
-			Rut = rut,
-			HostInstitution = hostInstitution,
-			AcademicPeriod = academicPeriod,
-			CourseCandidates = courseCandidates,
-			TextPreview = BuildTextPreview(rawText),
-			NormalizedPreview = BuildTextPreview(normalizedText),
-			HasText = hasText,
-			LikelyScanned = ocrPageCount > 0,          // Ahora es preciso
-        	PagesTotal = pages.Count,                   // Nuevo campo
-        	PagesOcr = ocrPageCount,                    // Nuevo campo
-        	AverageOcrConfidence = averageOcrConfidence, // Nuevo campo
-        	ConfidenceScore = CalculateConfidenceScore(hasText, studentName, rut, hostInstitution, academicPeriod)
-		};
-	}
+    // ── 3. Normalizar ─────────────────────────────────────────────────────
+    var rawText  = textBuilder.ToString().Trim();
+    var cleaned  = TextNormalizer.Normalize(rawText);  // para extracción
+    var lines    = cleaned
+                    .Split('\n')
+                    .Select(l => l.Trim())
+                    .Where(l => !string.IsNullOrWhiteSpace(l))
+                    .ToList();
+
+    // ── 4. Extraer campos ─────────────────────────────────────────────────
+    var studentName    = DocumentFieldExtractor.ExtractStudentName(lines);
+    var rut            = ExtractRut(cleaned);
+    var hostInstitution = DocumentFieldExtractor.ExtractInstitution(lines);
+    var academicPeriod = DocumentFieldExtractor.ExtractAcademicPeriod(lines);
+
+    // Cursos: devuelve List<CourseEntry>, formateamos para el DTO
+    var courseEntries    = DocumentFieldExtractor.ExtractCourses(lines);
+    var courseCandidates = courseEntries
+        .Select(c => c.Grade is not null ? $"{c.Name} — {c.Grade}" : c.Name)
+        .ToList();
+
+    // ── 5. Métricas ───────────────────────────────────────────────────────
+    var hasText             = !string.IsNullOrWhiteSpace(rawText);
+    var averageOcrConfidence = ocrPageCount > 0 ? totalConfidence / ocrPageCount : -1f;
+    var confidenceScore     = CalculateConfidenceScore(
+                                hasText, studentName, rut, hostInstitution, academicPeriod);
+
+    // ── 6. Armar DTO ──────────────────────────────────────────────────────
+    return new DocumentExtractionResultDto
+    {
+        FileName             = pdfFile.FileName,
+        StudentName          = studentName,
+        Rut                  = rut,
+        HostInstitution      = hostInstitution,
+        AcademicPeriod       = academicPeriod,
+        CourseCandidates     = courseCandidates,
+        TextPreview          = BuildTextPreview(rawText),    // vista del texto crudo
+        NormalizedPreview    = BuildTextPreview(cleaned),    // vista del texto limpio
+        HasText              = hasText,
+        LikelyScanned        = ocrPageCount > 0,
+        PagesTotal           = pages.Count,
+        PagesOcr             = ocrPageCount,
+        AverageOcrConfidence = averageOcrConfidence,
+        ConfidenceScore      = confidenceScore
+    };
+}
 
 	private static string BuildTextPreview(string rawText)
 	{

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "wphoz23PTVNAh7LeS9GAjO7CcxFr6+NCJ0RsqAjcr6XUuItf8htTa+5T0NeYcVqBaeMl8SASog8+qP+t0CvloQ==",
+  "dgSpecHash": "nVrSI1bbMurX3MvMCy+l4zPHjzs7euFz0fY6H5FG+V3/GMWk4cYW6He8b5FJ1qqhFUvP0yJWZ5748hrpXH6/tA==",
   "success": true,
   "projectFilePath": "C:\\Users\\marti\\OneDrive\\Documentos\\U\\Séptimo semestre\\Proyecto Chemin\\Proyecto_Chemin\\backend\\backend.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\marti\\.nuget\\packages\\docnet.core\\2.6.0\\docnet.core.2.6.0.nupkg.sha512",
     "C:\\Users\\marti\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\marti\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.35\\microsoft.aspnetcore.authentication.jwtbearer.6.0.35.nupkg.sha512",
     "C:\\Users\\marti\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

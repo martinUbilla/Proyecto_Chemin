@@ -17,6 +17,7 @@
     <PackageReference Include="UglyToad.PdfPig" Version="1.7.0-custom-5" />
     <PackageReference Include="Tesseract" Version="5.2.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="Docnet.Core" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
