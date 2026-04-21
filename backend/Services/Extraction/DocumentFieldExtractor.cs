@@ -1,4 +1,3 @@
-// Services/Extraction/DocumentFieldExtractor.cs
 using System.Text.RegularExpressions;
 
 namespace backend.Services.Extraction;
@@ -11,7 +10,7 @@ namespace backend.Services.Extraction;
 /// </summary>
 public static class DocumentFieldExtractor
 {
-    // ── Diccionarios de etiquetas ──────────────────────────────────────────
+    
     public record CourseEntry(
     string Name,
     float? Grade
@@ -39,7 +38,7 @@ public static class DocumentFieldExtractor
         { "nota", "notas", "calificacion", "calificaciones", "grade", "grades",
           "mark", "marks", "note", "notes", "resultado" };
 
-    // ── API pública ────────────────────────────────────────────────────────
+    
 
     public static string? ExtractStudentName(IReadOnlyList<string> lines)
         => ExtractByLabel(lines, NameLabels, minLen: 5, maxLen: 90)
@@ -56,15 +55,15 @@ public static class DocumentFieldExtractor
 
     public static List<CourseEntry> ExtractCourses(IReadOnlyList<string> lines)
     {
-        // Intentar primero extracción tabular (más precisa)
+        
         var tabular = ExtractTabularCourses(lines);
         if (tabular.Count > 0) return tabular;
 
-        // Fallback: extracción por sección
+       
         return ExtractSectionCourses(lines);
     }
 
-    // ── Extracción por etiqueta ────────────────────────────────────────────
+   
 
     private static string? ExtractByLabel(
         IReadOnlyList<string> lines,
@@ -81,11 +80,11 @@ public static class DocumentFieldExtractor
                 var normalizedLabel = TextNormalizer.RemoveDiacritics(label);
                 if (!normalized.Contains(normalizedLabel)) continue;
 
-                // Estrategia A: valor en la misma línea tras separador
+                
                 var inline = ExtractInlineValue(lines[i], minLen, maxLen);
                 if (inline is not null) return inline;
 
-                // Estrategia B: valor en la línea siguiente
+               
                 if (i + 1 < lines.Count)
                 {
                     var next = lines[i + 1].Trim();
@@ -94,7 +93,7 @@ public static class DocumentFieldExtractor
                         return next;
                 }
 
-                // Estrategia C: valor dos líneas más abajo (tablas con celda vacía intermedia)
+                
                 if (i + 2 < lines.Count)
                 {
                     var next2 = lines[i + 2].Trim();
@@ -109,7 +108,7 @@ public static class DocumentFieldExtractor
 
     private static string? ExtractInlineValue(string line, int minLen, int maxLen)
     {
-        // Soporta separadores: "Alumno: Juan" | "Alumno - Juan" | "Alumno | Juan"
+        
         var match = Regex.Match(line, @"[:|\-–]\s*(.+)$");
         if (!match.Success) return null;
 
@@ -117,11 +116,10 @@ public static class DocumentFieldExtractor
         return IsPlausibleValue(value, minLen, maxLen) ? value : null;
     }
 
-    // ── Extracción de nombre por patrones semánticos ───────────────────────
 
     private static string? ExtractFromCertificatePhrase(IReadOnlyList<string> lines)
     {
-        // "certifica que NOMBRE RUT..." / "certify that NAME has completed..."
+       
         var pattern = new Regex(
             @"certifica(?:mos)?(?:\s+que)?|certif(?:y|ies)\s+that",
             RegexOptions.IgnoreCase);
@@ -130,9 +128,9 @@ public static class DocumentFieldExtractor
         {
             if (!pattern.IsMatch(line)) continue;
 
-            // El nombre viene inmediatamente después de la frase
+            
             var afterPhrase = pattern.Replace(line, "").Trim();
-            // Cortar antes del RUT o de otra cláusula
+           
             var name = Regex.Match(afterPhrase,
                 @"^([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,4})");
             if (name.Success) return name.Groups[1].Value;
@@ -142,7 +140,7 @@ public static class DocumentFieldExtractor
 
     private static string? ExtractNameHeuristic(IReadOnlyList<string> lines)
     {
-        // Busca líneas con 2-5 palabras capitalizadas, sin dígitos, longitud razonable
+
         var namePattern = new Regex(
             @"^([A-ZÁÉÍÓÚÑ][a-záéíóúñ']+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ']+){1,4})$");
 
@@ -160,7 +158,6 @@ public static class DocumentFieldExtractor
         return null;
     }
 
-    // ── Extracción de institución ──────────────────────────────────────────
 
     private static string? ExtractInstitutionPattern(IReadOnlyList<string> lines)
     {
@@ -177,7 +174,6 @@ public static class DocumentFieldExtractor
         return null;
     }
 
-    // ── Extracción de período ──────────────────────────────────────────────
 
     private static string? ExtractPeriodPattern(IReadOnlyList<string> lines)
     {
@@ -198,14 +194,11 @@ public static class DocumentFieldExtractor
         return null;
     }
 
-    // ── Extracción de cursos: modo tabular ─────────────────────────────────
-    // Detecta cuando el texto tiene estructura "Curso | Nota" o columnas separadas por espacios
 
     private static List<CourseEntry> ExtractTabularCourses(IReadOnlyList<string> lines)
     {
         var results = new List<CourseEntry>();
 
-        // Patrón: "Nombre del curso    5.5" o "Nombre del curso | 5,5 | Aprobado"
         var linePattern = new Regex(
             @"^(.{5,80}?)\s{2,}([\d][.,]\d{1,2}|\d{1,3}(?:[.,]\d{1,2})?)\s*$");
         var pipePattern = new Regex(
@@ -239,7 +232,6 @@ public static class DocumentFieldExtractor
         return results;
     }
 
-    // ── Extracción de cursos: modo sección (sin columna de nota) ──────────
 
     private static List<CourseEntry> ExtractSectionCourses(IReadOnlyList<string> lines)
     {
@@ -261,7 +253,6 @@ public static class DocumentFieldExtractor
             var name = CleanCourseName(StripLeadingBulletOrCode(line));
             if (name.Length < 4 || name.Split(' ').Length < 2) continue;
 
-            // Buscar nota en la misma línea o en la siguiente
             var grade = TryExtractGradeFromLine(line)
                      ?? (i + 1 < lines.Count ? TryExtractGradeFromLine(lines[i + 1]) : null);
 
@@ -274,7 +265,6 @@ public static class DocumentFieldExtractor
             .ToList();
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────
 
     private static bool IsSectionEnd(string line)
     {

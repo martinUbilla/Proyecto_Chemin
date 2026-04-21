@@ -25,11 +25,10 @@ public class HybridPdfExtractor : IHybridPdfExtractor, IDisposable
         Stream pdfStream,
         CancellationToken cancellationToken = default)
     {
-        // Materializar en memoria una sola vez
         using var buffer = new MemoryStream();
         await pdfStream.CopyToAsync(buffer, cancellationToken);
-        var pdfBytes = buffer.ToArray(); // Para Docnet (necesita byte[])
-        buffer.Position = 0;            // Para PdfPig (necesita Stream)
+        var pdfBytes = buffer.ToArray(); 
+        buffer.Position = 0;            
 
         var results = new List<PageExtractionResult>();
 
@@ -64,12 +63,12 @@ public class HybridPdfExtractor : IHybridPdfExtractor, IDisposable
 
     private Task<PageExtractionResult> RunOcrAsync(byte[] pdfBytes, int pageNumber)
     {
-        // Tesseract es single-threaded; Task.Run evita bloquear el hilo de ASP.NET
+        
         return Task.Run(() =>
         {
             try
             {
-                // pageIndex es 0-based en Docnet
+                
                 using var bitmap = PageRasterizer.RenderPage(pdfBytes, pageNumber - 1);
                 using var pix    = BitmapToPix(bitmap);
                 using var page   = _engine.Process(pix);

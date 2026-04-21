@@ -15,7 +15,6 @@ namespace backend.Services
             _configuration = configuration;
         }
 
-        // Mock users for Phase 1 testing
         private static readonly Dictionary<string, (string Name, string Surname, string Role)> MockUsers = new(StringComparer.OrdinalIgnoreCase)
         {
             { "student@chemin.local", ("Juan", "García", "Student") },
@@ -24,7 +23,6 @@ namespace backend.Services
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest request)
         {
-            // Mock password validation: any non-empty password works for demo
             if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 return null;
 

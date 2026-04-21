@@ -16,11 +16,9 @@ public static class PageAnalyzer
         var alphaCount  = nativeText.Count(char.IsLetterOrDigit);
         var hasImages   = page.GetImages().Any();
 
-        // Caso 1: Página puramente escaneada — sin texto digital y con imagen
         if (alphaCount < MinAlphanumericForDigital && hasImages)
             return true;
 
-        // Caso 2: Sin texto y sin imágenes detectables (PDF vacío o corrupto)
         if (alphaCount == 0)
             return true;
 

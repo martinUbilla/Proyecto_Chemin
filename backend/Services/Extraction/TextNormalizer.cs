@@ -9,9 +9,9 @@ public static class TextNormalizer
     // Caracteres que el OCR confunde frecuentemente
     private static readonly (string From, string To)[] OcrFixes =
     {
-        ("0", "O"), // solo en contexto de nombres — ver uso más abajo
+        ("0", "O"), 
         ("|", "I"),
-        ("l1", ""),  // placeholder, ver NormalizeLine
+        ("l1", ""),  
         ("¡", "i"),
         ("°", "o"),
     };
@@ -35,10 +35,8 @@ public static class TextNormalizer
     {
         if (line is null) return string.Empty;
 
-        // Colapsar espacios múltiples
         var result = Regex.Replace(line, @"\s+", " ").Trim();
 
-        // Quitar caracteres basura (guiones largos, comillas raras, etc.)
         result = Regex.Replace(result, @"[^\w\s\-\.,:;/áéíóúñüÁÉÍÓÚÑÜ@°%()]", " ");
         result = Regex.Replace(result, @"\s+", " ").Trim();
 
